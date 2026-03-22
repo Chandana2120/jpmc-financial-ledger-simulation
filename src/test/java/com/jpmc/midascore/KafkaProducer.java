@@ -17,6 +17,16 @@ public class KafkaProducer {
 
     public void send(String transactionLine) {
         String[] transactionData = transactionLine.split(", ");
-        kafkaTemplate.send(topic, new Transaction(Long.parseLong(transactionData[0]), Long.parseLong(transactionData[1]), Float.parseFloat(transactionData[2])));
+
+        // Creating the transaction object from the CSV line
+        // Assuming format: senderId, receiverId, amount
+        Transaction transaction = new Transaction(
+                Long.parseLong(transactionData[0]),
+                Long.parseLong(transactionData[1]),
+                Float.parseFloat(transactionData[2])
+        );
+
+        // Sending the actual Object, not a String
+        kafkaTemplate.send(topic, transaction);
     }
 }
