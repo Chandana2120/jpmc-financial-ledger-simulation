@@ -55,3 +55,20 @@ In this phase, I focused on "Transaction Validation." Just as a blockchain node 
 
 ---
 
+## 🏦 Phase 3: Relational Persistence & Transaction Validation (Task 3)
+
+### **Objective**
+The goal of this phase was to transform Midas Core into a resilient system by integrating an H2 database to validate and permanently record transactions.
+
+### **Technical Implementation**
+* **Data Modeling:** Developed a `TransactionRecord` JPA entity with **Many-to-One** relationships to the `UserRecord` entity, creating a linked ledger.
+* **Service Layer Logic:** Built a `LedgerService` to enforce critical business rules:
+    1. Verify Sender and Recipient existence.
+    2. Enforce balance checks (Sender Balance ≥ Transaction Amount).
+    3. Execute atomic balance updates for both parties.
+* **Data Persistence:** Integrated **Spring Data JPA** repositories to manage CRUD operations on the in-memory H2 database.
+* **Validation:** Processed a high-volume transaction stream via Kafka and successfully verified the final state of the ledger (e.g., Waldorf's closing balance).
+
+### **Blockchain Alignment**
+This phase implements the **"State Transition Function."** Just as a blockchain node updates its world state (account balances) only after validating a transaction against the current ledger rules, Midas Core now ensures data integrity before any record is committed to the database.
+
