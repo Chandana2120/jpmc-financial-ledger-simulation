@@ -1,5 +1,7 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.entity.UserRecord;
+import com.jpmc.midascore.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,9 @@ public class TaskFourTests {
     private KafkaProducer kafkaProducer;
 
     @Autowired
+    private UserRepository userRepository; // Added this
+
+    @Autowired
     private UserPopulator userPopulator;
 
     @Autowired
@@ -30,13 +35,26 @@ public class TaskFourTests {
         for (String transactionLine : transactionLines) {
             kafkaProducer.send(transactionLine);
         }
-        Thread.sleep(2000);
 
+        // Give it 15 seconds to call the external API for all transactions
+        logger.info("Processing transactions with external incentives...");
+        Thread.sleep(15000);
 
-        logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
-        logger.info("use your debugger to find out what wilbur's balance is after all transactions are processed");
+        // --- THE ANSWER SECTION ---
+        UserRecord wilbur = userRepository.findByName("wilbur");
+        if (wilbur != null) {
+            float balance = wilbur.getBalance();
+            int roundedBalance = (int) Math.floor(balance);
+
+            logger.info("----------------------------------------------------------");
+            logger.info("FINAL WILBUR BALANCE: " + balance);
+            logger.info(">>> QUIZ ANSWER (ROUNDED DOWN): " + roundedBalance);
+            logger.info("----------------------------------------------------------");
+        } else {
+            logger.error("User 'wilbur' not found in database!");
+        }
+        // ---------------------------
+
         logger.info("kill this test once you find the answer");
         while (true) {
             Thread.sleep(20000);

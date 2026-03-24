@@ -6,7 +6,7 @@ This repository contains my progress through the J.P. Morgan Chase Software Engi
 
 ---
 
-## 🏗️ Phase 1: Infrastructure & Ledger Foundation (Task 1)
+##  Phase 1: Infrastructure & Ledger Foundation
 
 ### **Objective**
 The primary goal of this phase was to establish a high-performance backend environment for the **Midas Core** service, simulating the node setup required for a distributed financial network.
@@ -21,7 +21,7 @@ In this task, I focused on the "Network Layer." Just as a blockchain node requir
 
 ---
 
-## 🛠️ Phase 2: Event-Driven Architecture & Data Ingestion (Task 2)
+##  Phase 2: Event-Driven Architecture & Data Ingestion 
 
 ### **Objective**
 The goal was to implement the "Listener" logic for the Midas Core service, enabling it to consume, deserialize, and process incoming financial transactions from the Kafka stream.
@@ -55,7 +55,7 @@ In this phase, I focused on "Transaction Validation." Just as a blockchain node 
 
 ---
 
-## 🏦 Phase 3: Relational Persistence & Transaction Validation (Task 3)
+##  Phase 3: Relational Persistence & Transaction Validation 
 
 ### **Objective**
 The goal of this phase was to transform Midas Core into a resilient system by integrating an H2 database to validate and permanently record transactions.
@@ -71,4 +71,25 @@ The goal of this phase was to transform Midas Core into a resilient system by in
 
 ### **Blockchain Alignment**
 This phase implements the **"State Transition Function."** Just as a blockchain node updates its world state (account balances) only after validating a transaction against the current ledger rules, Midas Core now ensures data integrity before any record is committed to the database.
+
+---
+
+##  Phase 4: External Service Integration 
+
+### **Objective**
+The final phase focused on integrating Midas Core with an external **Incentive API** to incorporate a rewards system. This task simulated a microservices environment where different teams manage separate pieces of business logic.
+
+### **Technical Implementation**
+* **REST API Consumption:** Configured a `RestTemplate` bean to enable synchronous HTTP communication between Midas Core and the external Incentive Service.
+* **JSON Mapping:** Created an `Incentive` POJO to automatically deserialize JSON responses from the external API into Java objects.
+* **Service Orchestration:** Updated the `LedgerService` to perform a three-step processing flow:
+  1. Validate the transaction internally.
+  2. Query the external REST endpoint (`/incentive`) for potential rewards.
+  3. Apply both the transaction amount and the external incentive to the recipient's balance.
+* **Schema Evolution:** Modified the `TransactionRecord` entity to store the `incentive` amount, ensuring a full audit trail of all funds entering the system.
+
+### **Key Learnings**
+* **Decoupling:** Learned how REST APIs act as a contract between services, allowing the Incentive team to update their logic without requiring changes to the Midas Core codebase.
+* **Resiliency:** Handled connection logic and verified system state across multiple running services.
+* **Final Validation:** Successfully processed a complex data stream and verified the final ledger state (Wilbur's balance: **3089**).
 

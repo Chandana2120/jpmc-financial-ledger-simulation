@@ -20,15 +20,17 @@ public class TransactionRecord {
     private UserRecord recipient;
 
     private float amount;
+    private float incentive;
 
     // Protected constructor for JPA
     protected TransactionRecord() {
     }
 
-    public TransactionRecord(UserRecord sender, UserRecord recipient, float amount) {
+    public TransactionRecord(UserRecord sender, UserRecord recipient, float amount, float incentive) {
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
+        this.incentive = incentive;
     }
 
     // Getters
@@ -48,6 +50,9 @@ public class TransactionRecord {
         return amount;
     }
 
+    public float getIncentive() {
+        return incentive;
+    }
     @Override
     public String toString() {
         return "TransactionRecord{" +
