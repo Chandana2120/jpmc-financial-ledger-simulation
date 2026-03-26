@@ -93,3 +93,24 @@ The final phase focused on integrating Midas Core with an external **Incentive A
 * **Resiliency:** Handled connection logic and verified system state across multiple running services.
 * **Final Validation:** Successfully processed a complex data stream and verified the final ledger state (Wilbur's balance: **3089**).
 
+---
+
+##  Phase 5: User-Facing API Exposure 
+
+### **Objective**
+The final phase transformed Midas Core into a functional server by exposing a REST API. This allows external users or frontend applications to query live account balances directly from the ledger.
+
+### **Technical Implementation**
+* **REST Controller Development:** Implemented a `@RestController` to handle incoming GET requests at the `/balance` endpoint.
+* **Dynamic Data Retrieval:** Integrated the `UserRepository` within the controller to perform real-time database lookups based on a `userId` request parameter.
+* **JSON Serialization:** Leveraged Spring Boot's default Jackson integration to automatically serialize Java `Balance` objects into JSON format for web consumption.
+* **System Configuration:** Configured the application to operate on port **33400**, ensuring it runs as a dedicated service alongside the Kafka listeners and database layers.
+* **Error Handling:** Implemented logic to return a default balance of `0.0` for non-existent user IDs, ensuring API stability and predictable responses.
+
+### **Key Architectual Learnings**
+* **Server-Side Development:** Transitioned the application from a data processor to a data provider.
+* **Full-Stack Backend Logic:** Completed the full data lifecycle: **Ingest** (Kafka) $\rightarrow$ **Validate** (Service Layer) $\rightarrow$ **Persist** (JPA/H2) $\rightarrow$ **Expose** (REST).
+* **Final Verification:** Successfully passed the `TaskFiveTests` suite, confirming the accuracy of the ledger's state after thousands of simulated transactions.
+
+### **Project Status: COMPLETE **
+The Midas Core system is now a robust, event-driven financial engine ready for enterprise-level transaction processing.
